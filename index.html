@@ -143,7 +143,7 @@
     <a href="#" class="logo">NEW<span> DAY</span></a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
-      <li><a href="#about">About</a></li>
+      <li><a href="about.html">About</a></li>
       <li><a href="#process">Process</a></li>
       <li><a href="#team">Team</a></li>
     </ul>
@@ -163,7 +163,7 @@
     <p class="hero-sub">New Day is a future-forward software company crafting innovative digital solutions — from web platforms to AI-powered tools.</p>
     <div class="hero-actions">
       <a href="#services" class="btn-primary">Explore Services →</a>
-      <a href="#about" class="btn-secondary">Our Story</a>
+      <a href="about.html" class="btn-secondary">Our Story</a>
     </div>
     <div class="hero-scroll">
       <span class="scroll-text">Scroll</span>
@@ -239,8 +239,8 @@
     <h2 class="cta-title">Ready to Build<br>Something <em>Great?</em></h2>
     <p class="cta-sub">Tell us your idea. We'll make it real.</p>
     <div style="display:flex;gap:1rem;justify-content:center;position:relative;z-index:2">
-      <a href="mailto:hello@newday.dev" class="btn-primary">Start a Project →</a>
-      <a href="#about" class="btn-secondary">Learn More</a>
+      <a href="/cdn-cgi/l/email-protection#d7bfb2bbbbb897b9b2a0b3b6aef9b3b2a1" class="btn-primary">Start a Project →</a>
+      <a href="about.html" class="btn-secondary">Learn More</a>
     </div>
   </section>
 
@@ -249,13 +249,13 @@
     <div class="footer-copy">© 2025 New Day Software. All rights reserved.</div>
     <div class="footer-links">
       <a href="#services">Services</a>
-      <a href="#about">About</a>
+      <a href="about.html">About</a>
       <a href="#team">Team</a>
       <a href="#contact">Contact</a>
     </div>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     const cursor = document.getElementById('cursor');
     const follower = document.getElementById('cursorFollower');
     let mx=0,my=0,fx=0,fy=0;
@@ -280,7 +280,7 @@
       });
     },{threshold:0.5});
     document.querySelectorAll('.stat-num[data-target]').forEach(c=>counterObserver.observe(c));
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});});});
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const target=document.querySelector(a.getAttribute('href'));if(target){window.scrollTo({top:target.offsetTop-70,behavior:'smooth'});}});});
   </script>
 </body>
 </html>
