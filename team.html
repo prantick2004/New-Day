@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Team — New Day Software</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --gold:#c9a84c;--gold-light:#e8c97a;
+      --dark:#0b0b0f;--dark2:#13131a;--dark3:#1c1c27;--dark4:#252535;
+      --text:#e8e8f0;--text-muted:#888899;--text-dim:#555568;
+      --accent:#7c6aff;--accent2:#4fc4cf;--green:#4fcc8a;--red:#ff6b6b;--radius:14px;
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;cursor:none;}
+    .cursor{width:10px;height:10px;background:var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+    .cursor-ring{width:38px;height:38px;border:1px solid rgba(201,168,76,0.55);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.16s ease;}
+    body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:900;opacity:0.45;}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:1.4rem 5%;display:flex;align-items:center;justify-content:space-between;background:rgba(11,11,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(201,168,76,0.07);}
+    .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;letter-spacing:-0.02em;color:var(--gold);text-decoration:none;}
+    .logo span{color:var(--text);}
+    .nav-links{display:flex;gap:2.5rem;list-style:none;}
+    .nav-links a{color:var(--text-muted);text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;transition:color .3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .3s;}
+    .nav-links a:hover,.nav-links a.active{color:var(--gold);}
+    .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);}
+    .nav-cta{padding:0.55rem 1.4rem;background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:100px;font-size:0.82rem;font-weight:500;text-decoration:none;transition:all .3s;}
+    .nav-cta:hover{background:var(--gold);color:var(--dark);}
+
+    /* HERO */
+    .page-hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10rem 5% 6rem;position:relative;overflow:hidden;}
+    .hero-bg{position:absolute;inset:0;}
+    /* Dot grid */
+    .dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(201,168,76,0.15) 1px,transparent 1px);background-size:40px 40px;animation:dotPulse 6s ease-in-out infinite;}
+    @keyframes dotPulse{0%,100%{opacity:0.4}50%{opacity:0.8}}
+    .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+    .o1{width:600px;height:600px;background:radial-gradient(circle,rgba(201,168,76,0.1),transparent 70%);top:-200px;left:-100px;animation:oa 14s ease-in-out infinite;}
+    .o2{width:400px;height:400px;background:radial-gradient(circle,rgba(124,106,255,0.08),transparent 70%);bottom:-100px;right:-100px;animation:ob 11s ease-in-out infinite;}
+    .o3{width:250px;height:250px;background:radial-gradient(circle,rgba(79,196,207,0.07),transparent 70%);top:30%;right:15%;animation:oc 9s ease-in-out infinite;}
+    @keyframes oa{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,50px)}}
+    @keyframes ob{0%,100%{transform:translate(0,0)}50%{transform:translate(-50px,-60px)}}
+    @keyframes oc{0%,100%{transform:scale(1)}50%{transform:scale(1.4)}}
+
+    .page-tag{display:inline-flex;align-items:center;gap:8px;padding:0.35rem 1.1rem;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);border-radius:100px;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold-light);margin-bottom:2rem;animation:fadeDown .7s ease both;position:relative;z-index:2;}
+    .dot-blink{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:blink 2s ease-in-out infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+    .hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(3.5rem,8vw,7.5rem);line-height:0.92;letter-spacing:-0.04em;position:relative;z-index:2;animation:fadeUp 1s ease 0.15s both;}
+    .ht1{display:block;color:var(--text);}
+    .ht2{display:block;-webkit-text-stroke:1.5px rgba(201,168,76,0.5);color:transparent;}
+    .ht3{display:block;background:linear-gradient(135deg,var(--gold),var(--gold-light) 50%,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+    .hero-sub{font-size:1.05rem;color:var(--text-muted);line-height:1.75;font-weight:300;max-width:560px;margin:2rem auto 0;position:relative;z-index:2;animation:fadeUp 1s ease 0.3s both;}
+
+    /* Team count row */
+    .count-row{display:flex;align-items:center;justify-content:center;gap:3rem;margin-top:3.5rem;position:relative;z-index:2;animation:fadeUp 1s ease 0.45s both;}
+    .count-item{text-align:center;}
+    .count-num{font-family:'Syne',sans-serif;font-weight:800;font-size:2.5rem;color:var(--gold);}
+    .count-label{font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-top:0.2rem;}
+    .count-sep{width:1px;height:50px;background:rgba(255,255,255,0.08);}
+
+    /* TEAM CARDS — unique horizontal scroll on mobile, masonry on desktop */
+    .team-section{padding:7rem 5%;}
+    .sec-tag{display:inline-flex;align-items:center;gap:10px;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+    .sec-tag::before{content:'';width:28px;height:1px;background:var(--gold);}
+    .sec-h2{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(1.8rem,3.5vw,2.8rem);letter-spacing:-0.02em;line-height:1.1;max-width:500px;}
+    .sec-h2 em{font-style:normal;background:linear-gradient(135deg,var(--gold),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+    .team-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:4rem;gap:2rem;}
+    .team-header-right{font-size:0.85rem;color:var(--text-dim);max-width:200px;text-align:right;line-height:1.6;}
+
+    /* Big feature card for founder */
+    .founder-card{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid rgba(201,168,76,0.15);border-radius:24px;overflow:hidden;margin-bottom:2rem;opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease;}
+    .founder-card.visible{opacity:1;transform:translateY(0);}
+    .founder-left{padding:3.5rem;background:var(--dark2);position:relative;overflow:hidden;}
+    .founder-left::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--accent2));}
+    .founder-avatar{width:100px;height:100px;border-radius:50%;background:rgba(201,168,76,0.1);border:2px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--gold);margin-bottom:1.8rem;transition:all .3s;}
+    .founder-card:hover .founder-avatar{box-shadow:0 0 30px rgba(201,168,76,0.25);}
+    .founder-role-tag{display:inline-block;padding:0.3rem 0.9rem;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.25);border-radius:100px;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+    .founder-name{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;letter-spacing:-0.02em;margin-bottom:0.5rem;}
+    .founder-title{font-size:0.95rem;color:var(--text-muted);margin-bottom:1.5rem;}
+    .founder-bio{font-size:0.9rem;color:var(--text-muted);line-height:1.75;}
+    .founder-skills{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1.5rem;}
+    .skill-pill{padding:0.3rem 0.85rem;border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.72rem;color:var(--text-dim);}
+
+    .founder-right{background:var(--dark3);padding:3.5rem;display:flex;flex-direction:column;justify-content:space-between;}
+    .founder-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+    .fstat{padding:1.5rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);}
+    .fstat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--gold);margin-bottom:0.3rem;}
+    .fstat-label{font-size:0.78rem;color:var(--text-muted);}
+    .founder-quote{padding:1.5rem;background:rgba(201,168,76,0.04);border-left:2px solid var(--gold);border-radius:0 var(--radius) var(--radius) 0;margin-top:1.5rem;}
+    .founder-quote p{font-size:0.9rem;color:var(--text-muted);line-height:1.7;font-style:italic;}
+    .founder-quote cite{display:block;font-size:0.75rem;color:var(--gold);margin-top:0.8rem;font-style:normal;}
+
+    /* Regular team grid */
+    .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+    .team-card{background:var(--dark2);border:1px solid rgba(255,255,255,0.05);border-radius:20px;overflow:hidden;transition:all .3s;opacity:0;transform:translateY(25px);transition:opacity .6s ease,transform .6s ease,border-color .3s,background .3s;position:relative;}
+    .team-card.visible{opacity:1;transform:translateY(0);}
+    .team-card:hover{border-color:rgba(201,168,76,0.2);background:var(--dark3);}
+    .card-top{padding:2rem 2rem 1.5rem;position:relative;}
+    .card-num{position:absolute;top:1.5rem;right:1.5rem;font-family:'Syne',sans-serif;font-weight:800;font-size:2.5rem;color:rgba(255,255,255,0.03);line-height:1;}
+    .card-avatar{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;margin-bottom:1.2rem;border:1px solid rgba(255,255,255,0.08);transition:all .3s;}
+    .team-card:hover .card-avatar{transform:scale(1.05);}
+    .card-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.3rem;}
+    .card-role{font-size:0.8rem;color:var(--text-muted);margin-bottom:1.2rem;}
+    .card-bio{font-size:0.82rem;color:var(--text-dim);line-height:1.65;}
+    .card-bottom{padding:1.2rem 2rem 2rem;border-top:1px solid rgba(255,255,255,0.04);}
+    .card-skills{display:flex;flex-wrap:wrap;gap:0.4rem;}
+    .card-skill{font-size:0.68rem;padding:0.22rem 0.65rem;background:rgba(255,255,255,0.04);border-radius:100px;color:var(--text-dim);}
+    .card-accent-bar{height:2px;width:0;background:linear-gradient(90deg,var(--gold),var(--accent2));transition:width .4s ease;position:absolute;bottom:0;left:0;}
+    .team-card:hover .card-accent-bar{width:100%;}
+
+    /* VALUES SECTION */
+    .values-section{padding:0 5% 7rem;background:transparent;}
+    .values-inner{background:var(--dark2);border:1px solid rgba(255,255,255,0.05);border-radius:24px;padding:4rem;position:relative;overflow:hidden;}
+    .values-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--accent),var(--accent2));}
+    .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2.5rem;margin-top:3rem;}
+    .val-item{opacity:0;transform:translateY(20px);transition:all .5s ease;}
+    .val-item.visible{opacity:1;transform:translateY(0);}
+    .val-icon{font-size:1.8rem;margin-bottom:1rem;display:block;}
+    .val-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.5rem;color:var(--gold);}
+    .val-text{font-size:0.85rem;color:var(--text-muted);line-height:1.65;}
+
+    /* CULTURE SECTION */
+    .culture-section{padding:0 5% 7rem;}
+    .culture-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:3.5rem;}
+    .culture-card{padding:2.5rem;border-radius:20px;position:relative;overflow:hidden;opacity:0;transform:scale(0.96);transition:opacity .6s ease,transform .6s ease;}
+    .culture-card.visible{opacity:1;transform:scale(1);}
+    .cc1{background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(201,168,76,0.02));border:1px solid rgba(201,168,76,0.15);}
+    .cc2{background:linear-gradient(135deg,rgba(124,106,255,0.08),rgba(124,106,255,0.02));border:1px solid rgba(124,106,255,0.15);}
+    .cc3{background:linear-gradient(135deg,rgba(79,196,207,0.08),rgba(79,196,207,0.02));border:1px solid rgba(79,196,207,0.15);}
+    .cc4{background:linear-gradient(135deg,rgba(79,204,138,0.08),rgba(79,204,138,0.02));border:1px solid rgba(79,204,138,0.15);}
+    .cc-icon{font-size:2.5rem;margin-bottom:1.2rem;display:block;}
+    .cc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:0.7rem;}
+    .cc-text{font-size:0.88rem;color:var(--text-muted);line-height:1.7;}
+
+    /* JOIN SECTION */
+    .join-section{margin:0 5% 7rem;padding:4.5rem;background:var(--dark2);border:1px solid rgba(201,168,76,0.12);border-radius:24px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:3rem;position:relative;overflow:hidden;}
+    .join-section::before{content:'';position:absolute;right:-100px;top:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(201,168,76,0.06),transparent 70%);pointer-events:none;}
+    .join-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.8rem,3vw,2.5rem);letter-spacing:-0.02em;line-height:1.1;margin-bottom:1rem;}
+    .join-title em{font-style:normal;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .join-sub{font-size:0.92rem;color:var(--text-muted);}
+    .join-btns{display:flex;flex-direction:column;gap:0.8rem;min-width:180px;}
+    .btn-gold{padding:0.85rem 2rem;background:var(--gold);color:var(--dark);border:none;border-radius:100px;font-weight:600;font-size:0.9rem;text-decoration:none;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;}
+    .btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 16px 35px rgba(201,168,76,0.25);}
+    .btn-outline{padding:0.85rem 2rem;background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.1);border-radius:100px;font-weight:500;font-size:0.9rem;text-decoration:none;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;}
+    .btn-outline:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px);}
+
+    /* FOOTER */
+    footer{padding:2.5rem 5%;background:var(--dark2);border-top:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:space-between;}
+    .footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--gold);}
+    .footer-copy{font-size:0.78rem;color:var(--text-dim);}
+    .footer-links{display:flex;gap:2rem;}
+    .footer-links a{font-size:0.78rem;color:var(--text-dim);text-decoration:none;transition:color .3s;}
+    .footer-links a:hover{color:var(--gold);}
+
+    @keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+    @media(max-width:1024px){.founder-card{grid-template-columns:1fr;}.team-grid{grid-template-columns:repeat(2,1fr);}.join-section{grid-template-columns:1fr;}.values-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:768px){.nav-links{display:none;}.culture-grid{grid-template-columns:1fr;}.values-grid{grid-template-columns:1fr;}.count-row{gap:1.5rem;}.team-header{flex-direction:column;align-items:flex-start;}.team-header-right{text-align:left;}footer{flex-direction:column;gap:1rem;text-align:center;}.footer-links{flex-wrap:wrap;justify-content:center;}}
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <nav>
+    <a href="index.html" class="logo">NEW<span> DAY</span></a>
+    <ul class="nav-links">
+      <li><a href="services.html">Services</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="team.html" class="active">Team</a></li>
+    </ul>
+    <a href="contact.html" class="nav-cta">Get in Touch</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <div class="hero-bg">
+      <div class="dot-grid"></div>
+      <div class="orb o1"></div>
+      <div class="orb o2"></div>
+      <div class="orb o3"></div>
+    </div>
+    <div class="page-tag"><span class="dot-blink"></span>The People Behind The Code</div>
+    <h1 class="hero-title">
+      <span class="ht1">Five Minds.</span>
+      <span class="ht2">One Mission.</span>
+      <span class="ht3">Zero Limits.</span>
+    </h1>
+    <p class="hero-sub">We are a team of passionate BCA students turned builders — each bringing a unique skill set to the table, united by one obsession: building software that matters.</p>
+    <div class="count-row">
+      <div class="count-item"><div class="count-num">5</div><div class="count-label">Team Members</div></div>
+      <div class="count-sep"></div>
+      <div class="count-item"><div class="count-num">3+</div><div class="count-label">Projects Built</div></div>
+      <div class="count-sep"></div>
+      <div class="count-item"><div class="count-num">8+</div><div class="count-label">Technologies</div></div>
+      <div class="count-sep"></div>
+      <div class="count-item"><div class="count-num">∞</div><div class="count-label">Ambition</div></div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="team-section">
+    <div class="team-header">
+      <div>
+        <div class="sec-tag">Our People</div>
+        <h2 class="sec-h2">Meet the <em>Builders</em></h2>
+      </div>
+      <div class="team-header-right">Every person on this team was chosen for their skill, their attitude, and their hunger to build.</div>
+    </div>
+
+    <!-- FOUNDER CARD -->
+    <div class="founder-card">
+      <div class="founder-left">
+        <div class="founder-avatar">PM</div>
+        <div class="founder-role-tag">Founder & Lead Developer</div>
+        <div class="founder-name">Prantick Maity</div>
+        <div class="founder-title">New Town, West Bengal · BCA — B.P. Poddar Institute</div>
+        <p class="founder-bio">Prantick is the founder of New Day Software and the driving force behind the team's technical vision. With deep expertise in Python, MERN stack, and AI development, he leads both the architecture and execution of every project. Currently building Nova AI — a Python-powered personal voice assistant — alongside the company website.</p>
+        <div class="founder-skills">
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">React.js</span>
+          <span class="skill-pill">Node.js</span>
+          <span class="skill-pill">MongoDB</span>
+          <span class="skill-pill">AI / ML</span>
+          <span class="skill-pill">Nova AI</span>
+          <span class="skill-pill">WebRTC</span>
+          <span class="skill-pill">SQL</span>
+          <span class="skill-pill">Java</span>
+        </div>
+      </div>
+      <div class="founder-right">
+        <div class="founder-stat-grid">
+          <div class="fstat"><div class="fstat-num">2+</div><div class="fstat-label">Years Coding</div></div>
+          <div class="fstat"><div class="fstat-num">3+</div><div class="fstat-label">Projects Led</div></div>
+          <div class="fstat"><div class="fstat-num">9+</div><div class="fstat-label">Technologies</div></div>
+          <div class="fstat"><div class="fstat-num">1</div><div class="fstat-label">Big Dream</div></div>
+        </div>
+        <div class="founder-quote">
+          <p>"I don't just want to write code — I want to build things that actually change how people live and work. New Day is just the beginning."</p>
+          <cite>— Prantick Maity, Founder</cite>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEAM GRID -->
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="card-accent-bar"></div>
+        <div class="card-top">
+          <div class="card-num">02</div>
+          <div class="card-avatar" style="background:rgba(124,106,255,0.1);color:#a89fff;">TM</div>
+          <div class="card-name">Team Member</div>
+          <div class="card-role">Backend Developer</div>
+          <p class="card-bio">Handles server-side logic, API development, and database architecture. The backbone of every product we build.</p>
+        </div>
+        <div class="card-bottom">
+          <div class="card-skills">
+            <span class="card-skill">Node.js</span>
+            <span class="card-skill">Express</span>
+            <span class="card-skill">MongoDB</span>
+            <span class="card-skill">REST API</span>
+          </div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="card-accent-bar"></div>
+        <div class="card-top">
+          <div class="card-num">03</div>
+          <div class="card-avatar" style="background:rgba(79,196,207,0.1);color:var(--accent2);">TM</div>
+          <div class="card-name">Team Member</div>
+          <div class="card-role">UI/UX Designer</div>
+          <p class="card-bio">Crafts beautiful, intuitive interfaces. From wireframes to final design systems — every pixel is intentional.</p>
+        </div>
+        <div class="card-bottom">
+          <div class="card-skills">
+            <span class="card-skill">Figma</span>
+            <span class="card-skill">CSS</span>
+            <span class="card-skill">Prototyping</span>
+            <span class="card-skill">Design System</span>
+          </div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="card-accent-bar"></div>
+        <div class="card-top">
+          <div class="card-num">04</div>
+          <div class="card-avatar" style="background:rgba(201,168,76,0.1);color:var(--gold);">TM</div>
+          <div class="card-name">Team Member</div>
+          <div class="card-role">Mobile Developer</div>
+          <p class="card-bio">Builds cross-platform mobile apps that feel native. Passionate about smooth UX and performance on any device.</p>
+        </div>
+        <div class="card-bottom">
+          <div class="card-skills">
+            <span class="card-skill">React Native</span>
+            <span class="card-skill">Java</span>
+            <span class="card-skill">Android</span>
+            <span class="card-skill">iOS</span>
+          </div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="card-accent-bar"></div>
+        <div class="card-top">
+          <div class="card-num">05</div>
+          <div class="card-avatar" style="background:rgba(255,107,107,0.1);color:#ff9e9e;">TM</div>
+          <div class="card-name">Team Member</div>
+          <div class="card-role">AI Engineer</div>
+          <p class="card-bio">Integrates intelligent features using Python and ML libraries. Makes our products smarter with every iteration.</p>
+        </div>
+        <div class="card-bottom">
+          <div class="card-skills">
+            <span class="card-skill">Python</span>
+            <span class="card-skill">NumPy</span>
+            <span class="card-skill">OpenAI</span>
+            <span class="card-skill">Automation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="values-section">
+    <div class="values-inner">
+      <div class="sec-tag">What We Stand For</div>
+      <h2 class="sec-h2">Our Team <em>Values</em></h2>
+      <div class="values-grid">
+        <div class="val-item">
+          <span class="val-icon">🔥</span>
+          <div class="val-title">Hunger to Learn</div>
+          <div class="val-text">Every team member commits to learning something new every week. We grow individually so we can grow together.</div>
+        </div>
+        <div class="val-item">
+          <span class="val-icon">🤝</span>
+          <div class="val-title">Respect & Trust</div>
+          <div class="val-text">We debate ideas hard but always respect the person. Trust is the foundation — without it, great teams fall apart.</div>
+        </div>
+        <div class="val-item">
+          <span class="val-icon">⚡</span>
+          <div class="val-title">Bias for Action</div>
+          <div class="val-text">We ship. We don't wait for perfect conditions. A done product today beats a perfect plan tomorrow.</div>
+        </div>
+        <div class="val-item">
+          <span class="val-icon">🎯</span>
+          <div class="val-title">Ownership Mindset</div>
+          <div class="val-text">Every team member owns their work completely. No blame games — just accountability and solutions.</div>
+        </div>
+        <div class="val-item">
+          <span class="val-icon">💬</span>
+          <div class="val-title">Radical Honesty</div>
+          <div class="val-text">We give feedback that helps, not just feedback that feels good. Honest communication makes better products.</div>
+        </div>
+        <div class="val-item">
+          <span class="val-icon">🌍</span>
+          <div class="val-title">Impact Driven</div>
+          <div class="val-text">We measure success by the impact our work has on real people — not just by lines of code or features shipped.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CULTURE -->
+  <section class="culture-section">
+    <div class="sec-tag">Life at New Day</div>
+    <h2 class="sec-h2">Our <em>Culture</em></h2>
+    <div class="culture-grid">
+      <div class="culture-card cc1">
+        <span class="cc-icon">☕</span>
+        <div class="cc-title">Late Night Builds</div>
+        <div class="cc-text">Our best ideas happen after midnight. Between lectures and deadlines, we carve out time to build — because passion doesn't follow a 9-to-5 schedule.</div>
+      </div>
+      <div class="culture-card cc2">
+        <span class="cc-icon">🧩</span>
+        <div class="cc-title">Solve First, Worry Later</div>
+        <div class="cc-text">We're a team of problem solvers. When something breaks, we don't panic — we debug, collaborate, and find a way through. Every time.</div>
+      </div>
+      <div class="culture-card cc3">
+        <span class="cc-icon">📚</span>
+        <div class="cc-title">Always Learning</div>
+        <div class="cc-text">New framework? We try it. New algorithm? We study it. New tool? We build something with it. Curiosity is our superpower.</div>
+      </div>
+      <div class="culture-card cc4">
+        <span class="cc-icon">🚀</span>
+        <div class="cc-title">Dream Big, Execute Small</div>
+        <div class="cc-text">We have massive ambitions but we execute in focused sprints. Small wins compound into big results — that's how we think and work.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOIN -->
+  <div class="join-section">
+    <div>
+      <h2 class="join-title">Want to Join<br/>Our <em>Team?</em></h2>
+      <p class="join-sub">We're always looking for passionate builders. If you love code and want to build something real — let's talk.</p>
+    </div>
+    <div class="join-btns">
+      <a href="contact.html" class="btn-gold">Get In Touch →</a>
+      <a href="portfolio.html" class="btn-outline">See Our Work</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">NEW DAY</div>
+    <div class="footer-copy">© 2025 New Day Software. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    const cursor=document.getElementById('cursor');
+    const ring=document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+    function animRing(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+    animRing();
+    document.querySelectorAll('a,button').forEach(el=>{
+      el.addEventListener('mouseenter',()=>{ring.style.transform='translate(-50%,-50%) scale(2)';ring.style.opacity='0.15';cursor.style.transform='translate(-50%,-50%) scale(0.5)';});
+      el.addEventListener('mouseleave',()=>{ring.style.transform='translate(-50%,-50%) scale(1)';ring.style.opacity='0.55';cursor.style.transform='translate(-50%,-50%) scale(1)';});
+    });
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach((entry,i)=>{if(entry.isIntersecting)setTimeout(()=>entry.target.classList.add('visible'),i*100);});
+    },{threshold:0.1});
+    document.querySelectorAll('.founder-card,.team-card,.val-item,.culture-card').forEach(el=>obs.observe(el));
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)window.scrollTo({top:t.offsetTop-70,behavior:'smooth'});});
+    });
+  </script>
+</body>
+</html>
