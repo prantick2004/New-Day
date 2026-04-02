@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact — New Day Software</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --gold:#c9a84c;--gold-light:#e8c97a;
+      --dark:#0b0b0f;--dark2:#13131a;--dark3:#1c1c27;--dark4:#252535;
+      --text:#e8e8f0;--text-muted:#888899;--text-dim:#555568;
+      --accent:#7c6aff;--accent2:#4fc4cf;--green:#4fcc8a;--radius:14px;
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;cursor:none;}
+
+    /* CURSOR */
+    .cursor{width:10px;height:10px;background:var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .2s;}
+    .cursor-ring{width:38px;height:38px;border:1px solid rgba(201,168,76,0.55);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.16s ease;}
+
+    /* NOISE */
+    body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:900;opacity:0.45;}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:1.4rem 5%;display:flex;align-items:center;justify-content:space-between;background:rgba(11,11,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(201,168,76,0.07);}
+    .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;letter-spacing:-0.02em;color:var(--gold);text-decoration:none;}
+    .logo span{color:var(--text);}
+    .nav-links{display:flex;gap:2.5rem;list-style:none;}
+    .nav-links a{color:var(--text-muted);text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;transition:color .3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .3s;}
+    .nav-links a:hover,.nav-links a.active{color:var(--gold);}
+    .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);}
+    .nav-cta{padding:0.55rem 1.4rem;background:var(--gold);border:1px solid var(--gold);color:var(--dark);border-radius:100px;font-size:0.82rem;font-weight:600;text-decoration:none;transition:all .3s;}
+    .nav-cta:hover{background:var(--gold-light);}
+
+    /* HERO */
+    .page-hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden;}
+
+    /* Left side */
+    .hero-left{display:flex;flex-direction:column;justify-content:center;padding:10rem 5% 5rem 5%;position:relative;z-index:2;}
+
+    /* Right side — big form area */
+    .hero-right{background:var(--dark2);display:flex;align-items:center;justify-content:center;padding:10rem 4% 5rem;position:relative;overflow:hidden;border-left:1px solid rgba(201,168,76,0.07);}
+
+    /* Decorative circles on right */
+    .deco-circle{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,0.06);}
+    .dc1{width:500px;height:500px;top:-150px;right:-150px;}
+    .dc2{width:350px;height:350px;bottom:-100px;left:-80px;}
+    .dc3{width:200px;height:200px;top:40%;right:5%;}
+
+    /* Orbs */
+    .orb{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;}
+    .orb1{width:450px;height:450px;background:radial-gradient(circle,rgba(201,168,76,0.08),transparent 70%);top:-100px;left:-100px;animation:o1 13s ease-in-out infinite;}
+    .orb2{width:300px;height:300px;background:radial-gradient(circle,rgba(124,106,255,0.07),transparent 70%);bottom:10%;right:5%;animation:o2 10s ease-in-out infinite;}
+    @keyframes o1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,50px)}}
+    @keyframes o2{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,-40px)}}
+
+    /* Hero left content */
+    .page-tag{display:inline-flex;align-items:center;gap:8px;padding:0.35rem 1.1rem;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);border-radius:100px;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold-light);margin-bottom:2rem;animation:fadeDown .7s ease both;}
+    .dot-blink{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:blink 2s ease-in-out infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+    .hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(3rem,6vw,5.5rem);line-height:0.95;letter-spacing:-0.03em;animation:fadeUp 1s ease 0.15s both;}
+    .ht1{display:block;color:var(--text);}
+    .ht2{display:block;color:var(--text);}
+    .ht3{display:block;background:linear-gradient(135deg,var(--gold),var(--gold-light) 50%,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+    .hero-desc{font-size:1rem;color:var(--text-muted);line-height:1.75;font-weight:300;margin-top:2rem;max-width:420px;animation:fadeUp 1s ease 0.3s both;}
+
+    /* Contact info cards */
+    .contact-info{margin-top:3rem;display:flex;flex-direction:column;gap:1rem;animation:fadeUp 1s ease 0.45s both;}
+    .info-card{display:flex;align-items:center;gap:1.2rem;padding:1rem 1.4rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);transition:all .3s;}
+    .info-card:hover{background:rgba(201,168,76,0.05);border-color:rgba(201,168,76,0.2);}
+    .info-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .ic-gold{background:rgba(201,168,76,0.1);}
+    .ic-purple{background:rgba(124,106,255,0.1);}
+    .ic-teal{background:rgba(79,196,207,0.1);}
+    .info-label{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.2rem;}
+    .info-value{font-size:0.9rem;font-weight:500;color:var(--text);}
+
+    /* Social links */
+    .social-row{display:flex;gap:0.8rem;margin-top:2.5rem;animation:fadeUp 1s ease 0.6s both;}
+    .social-btn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:1rem;text-decoration:none;transition:all .3s;color:var(--text-muted);}
+    .social-btn:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 20px rgba(201,168,76,0.15);}
+
+    /* FORM */
+    .form-wrap{width:100%;max-width:500px;position:relative;z-index:2;animation:fadeLeft 1s ease 0.2s both;}
+
+    .form-header{margin-bottom:2.5rem;}
+    .form-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;letter-spacing:-0.02em;margin-bottom:0.5rem;}
+    .form-sub{font-size:0.88rem;color:var(--text-muted);}
+
+    .contact-form{display:flex;flex-direction:column;gap:1.2rem;}
+
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+    .field{display:flex;flex-direction:column;gap:0.5rem;}
+    .field label{font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);font-weight:500;}
+    .field input,.field textarea,.field select{
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:10px;
+      padding:0.9rem 1.1rem;
+      color:var(--text);
+      font-family:'DM Sans',sans-serif;
+      font-size:0.92rem;
+      outline:none;
+      transition:all .3s;
+      width:100%;
+    }
+    .field input::placeholder,.field textarea::placeholder{color:var(--text-dim);}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold);background:rgba(201,168,76,0.04);box-shadow:0 0 0 3px rgba(201,168,76,0.08);}
+    .field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888899' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;}
+    .field select option{background:var(--dark3);color:var(--text);}
+    .field textarea{resize:vertical;min-height:130px;line-height:1.6;}
+
+    /* Budget pills */
+    .budget-pills{display:flex;flex-wrap:wrap;gap:0.6rem;}
+    .budget-pill{padding:0.45rem 1rem;border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:0.78rem;color:var(--text-muted);cursor:pointer;transition:all .3s;background:transparent;font-family:'DM Sans',sans-serif;}
+    .budget-pill:hover,.budget-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08);}
+
+    /* Submit button */
+    .submit-btn{
+      padding:1rem 2rem;
+      background:var(--gold);
+      color:var(--dark);
+      border:none;
+      border-radius:100px;
+      font-family:'Syne',sans-serif;
+      font-weight:700;
+      font-size:0.95rem;
+      cursor:pointer;
+      transition:all .3s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      margin-top:0.5rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .submit-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);opacity:0;transition:opacity .3s;}
+    .submit-btn:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 16px 35px rgba(201,168,76,0.3);}
+    .submit-btn:hover::before{opacity:1;}
+    .submit-btn:active{transform:translateY(0);}
+    .submit-btn.loading{opacity:0.7;pointer-events:none;}
+    .btn-arrow{transition:transform .3s;}
+    .submit-btn:hover .btn-arrow{transform:translateX(5px);}
+
+    /* Success message */
+    .success-msg{display:none;text-align:center;padding:3rem 2rem;animation:fadeUp .5s ease both;}
+    .success-icon{font-size:4rem;margin-bottom:1rem;display:block;}
+    .success-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;color:var(--green);margin-bottom:0.8rem;}
+    .success-sub{font-size:0.9rem;color:var(--text-muted);line-height:1.6;}
+
+    /* WHY US STRIP */
+    .why-strip{padding:6rem 5%;border-top:1px solid rgba(255,255,255,0.04);}
+    .strip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.04);border-radius:var(--radius);overflow:hidden;margin-top:3.5rem;}
+    .strip-card{padding:2.2rem 1.8rem;background:var(--dark2);transition:background .3s;opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease,background .3s;}
+    .strip-card.visible{opacity:1;transform:translateY(0);}
+    .strip-card:hover{background:var(--dark3);}
+    .strip-icon{font-size:1.6rem;margin-bottom:1rem;display:block;}
+    .strip-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.92rem;margin-bottom:0.5rem;}
+    .strip-text{font-size:0.8rem;color:var(--text-muted);line-height:1.6;}
+
+    /* FAQ */
+    .faq-section{padding:0 5% 6rem;}
+    .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:3.5rem;}
+    .faq-item{padding:1.8rem;background:var(--dark2);border:1px solid rgba(255,255,255,0.05);border-radius:var(--radius);cursor:pointer;transition:all .3s;opacity:0;transform:translateY(15px);transition:opacity .5s ease,transform .5s ease,border-color .3s,background .3s;}
+    .faq-item.visible{opacity:1;transform:translateY(0);}
+    .faq-item:hover{border-color:rgba(201,168,76,0.2);background:var(--dark3);}
+    .faq-item.open{border-color:rgba(201,168,76,0.25);}
+    .faq-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+    .faq-q{font-family:'Syne',sans-serif;font-weight:700;font-size:0.92rem;line-height:1.4;}
+    .faq-chevron{width:24px;height:24px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0;transition:all .3s;color:var(--text-muted);}
+    .faq-item.open .faq-chevron{background:var(--gold);border-color:var(--gold);color:var(--dark);transform:rotate(180deg);}
+    .faq-ans{font-size:0.85rem;color:var(--text-muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .4s ease,margin .3s;}
+    .faq-item.open .faq-ans{max-height:200px;margin-top:1rem;}
+
+    /* MAP / LOCATION SECTION */
+    .location-section{padding:0 5% 6rem;}
+    .location-wrap{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;margin-top:3.5rem;}
+    .location-card{padding:2.5rem;background:var(--dark2);border:1px solid rgba(255,255,255,0.05);border-radius:20px;position:relative;overflow:hidden;}
+    .location-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--accent2));}
+    .loc-label{font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;}
+    .loc-item{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.5rem;}
+    .loc-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);margin-top:6px;flex-shrink:0;}
+    .loc-item-title{font-weight:600;font-size:0.9rem;margin-bottom:0.3rem;}
+    .loc-item-val{font-size:0.85rem;color:var(--text-muted);line-height:1.5;}
+
+    /* Fake map visual */
+    .map-visual{background:var(--dark3);border:1px solid rgba(255,255,255,0.05);border-radius:20px;height:300px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+    .map-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);background-size:30px 30px;}
+    .map-pin{position:relative;z-index:2;text-align:center;}
+    .pin-icon{font-size:2.5rem;animation:pinBounce 2s ease-in-out infinite;}
+    @keyframes pinBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .pin-label{font-family:'Syne',sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.1em;color:var(--gold);margin-top:0.5rem;}
+    .pin-ring{position:absolute;width:80px;height:80px;border-radius:50%;border:1px solid rgba(201,168,76,0.2);top:50%;left:50%;transform:translate(-50%,-50%);animation:pinRing 2s ease-out infinite;}
+    .pin-ring2{animation-delay:0.7s;}
+    @keyframes pinRing{0%{transform:translate(-50%,-50%) scale(0.5);opacity:1}100%{transform:translate(-50%,-50%) scale(2.5);opacity:0}}
+
+    /* FOOTER */
+    footer{padding:2.5rem 5%;background:var(--dark2);border-top:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:space-between;}
+    .footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--gold);}
+    .footer-copy{font-size:0.78rem;color:var(--text-dim);}
+    .footer-links{display:flex;gap:2rem;}
+    .footer-links a{font-size:0.78rem;color:var(--text-dim);text-decoration:none;transition:color .3s;}
+    .footer-links a:hover{color:var(--gold);}
+
+    /* SECTION COMMON */
+    .sec-tag{display:inline-flex;align-items:center;gap:10px;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+    .sec-tag::before{content:'';width:28px;height:1px;background:var(--gold);}
+    .sec-h2{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(1.8rem,3.5vw,2.8rem);letter-spacing:-0.02em;line-height:1.1;max-width:500px;}
+    .sec-h2 em{font-style:normal;background:linear-gradient(135deg,var(--gold),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+    /* KEYFRAMES */
+    @keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeLeft{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){
+      .page-hero{grid-template-columns:1fr;}
+      .hero-right{padding:4rem 5%;border-left:none;border-top:1px solid rgba(201,168,76,0.07);}
+      .form-wrap{max-width:100%;}
+      .strip-grid{grid-template-columns:repeat(2,1fr);}
+      .location-wrap{grid-template-columns:1fr;}
+      .faq-grid{grid-template-columns:1fr;}
+    }
+    @media(max-width:768px){
+      .nav-links{display:none;}
+      .form-row{grid-template-columns:1fr;}
+      .strip-grid{grid-template-columns:1fr;}
+      footer{flex-direction:column;gap:1rem;text-align:center;}
+      .footer-links{flex-wrap:wrap;justify-content:center;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">NEW<span> DAY</span></a>
+    <ul class="nav-links">
+      <li><a href="services.html">Services</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="index.html#process">Process</a></li>
+      <li><a href="index.html#team">Team</a></li>
+    </ul>
+    <a href="contact.html" class="nav-cta active">Contact</a>
+  </nav>
+
+  <!-- HERO — split layout -->
+  <section class="page-hero">
+
+    <!-- LEFT: Info -->
+    <div class="hero-left">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+
+      <div class="page-tag"><span class="dot-blink"></span>Get In Touch</div>
+      <h1 class="hero-title">
+        <span class="ht1">Let's Build</span>
+        <span class="ht2">Something</span>
+        <span class="ht3">Together.</span>
+      </h1>
+      <p class="hero-desc">Have an idea? A project? A question? We'd love to hear from you. Drop us a message and we'll get back to you within 24 hours.</p>
+
+      <div class="contact-info">
+        <div class="info-card">
+          <div class="info-icon ic-gold">📍</div>
+          <div>
+            <div class="info-label">Location</div>
+            <div class="info-value">Krishnapur, New Town, West Bengal, India</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon ic-purple">✉️</div>
+          <div>
+            <div class="info-label">Email Us</div>
+            <div class="info-value">hello@newdaysoftware.dev</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon ic-teal">⏰</div>
+          <div>
+            <div class="info-label">Response Time</div>
+            <div class="info-value">Within 24 hours — always</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="social-row">
+        <a href="#" class="social-btn" title="GitHub">⌨</a>
+        <a href="#" class="social-btn" title="LinkedIn">in</a>
+        <a href="#" class="social-btn" title="Twitter">𝕏</a>
+        <a href="#" class="social-btn" title="Instagram">◈</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: Form -->
+    <div class="hero-right">
+      <div class="deco-circle dc1"></div>
+      <div class="deco-circle dc2"></div>
+      <div class="deco-circle dc3"></div>
+
+      <div class="form-wrap">
+        <!-- Form view -->
+        <div id="formView">
+          <div class="form-header">
+            <div class="form-title">Send Us a Message</div>
+            <div class="form-sub">Fill in the details and we'll reach out shortly.</div>
+          </div>
+
+          <form class="contact-form" id="contactForm" novalidate>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="fname">First Name</label>
+                <input type="text" id="fname" placeholder="Prantick" required/>
+              </div>
+              <div class="field">
+                <label for="lname">Last Name</label>
+                <input type="text" id="lname" placeholder="Maity" required/>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" placeholder="you@example.com" required/>
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone Number (Optional)</label>
+              <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX"/>
+            </div>
+
+            <div class="field">
+              <label for="service">Service You Need</label>
+              <select id="service" required>
+                <option value="" disabled selected>Select a service...</option>
+                <option value="web">Web Development</option>
+                <option value="ai">AI Integration</option>
+                <option value="mobile">Mobile App</option>
+                <option value="backend">Database & Backend</option>
+                <option value="design">UI/UX Design</option>
+                <option value="consulting">Consulting & Support</option>
+                <option value="other">Other / Not Sure</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Estimated Budget</label>
+              <div class="budget-pills">
+                <button type="button" class="budget-pill" data-val="under1k">Under ₹1,000</button>
+                <button type="button" class="budget-pill" data-val="1k5k">₹1,000 – ₹5,000</button>
+                <button type="button" class="budget-pill" data-val="5k15k">₹5,000 – ₹15,000</button>
+                <button type="button" class="budget-pill" data-val="15kplus">₹15,000+</button>
+                <button type="button" class="budget-pill" data-val="discuss">Let's Discuss</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="message">Tell Us About Your Project</label>
+              <textarea id="message" placeholder="Describe your idea, goals, and any details that would help us understand what you need..." required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <span id="btnText">Send Message</span>
+              <span class="btn-arrow" id="btnArrow">→</span>
+            </button>
+
+          </form>
+        </div>
+
+        <!-- Success view -->
+        <div class="success-msg" id="successView">
+          <span class="success-icon">🎉</span>
+          <div class="success-title">Message Sent!</div>
+          <p class="success-sub">Thanks for reaching out! We've received your message and will get back to you within 24 hours. Keep building great things! 🚀</p>
+          <br/>
+          <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;padding:0.85rem 2rem;background:var(--gold);color:var(--dark);border-radius:100px;font-weight:700;font-size:0.9rem;text-decoration:none;margin-top:1rem;transition:all .3s;" onmouseover="this.style.background='var(--gold-light)'" onmouseout="this.style.background='var(--gold)'">← Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US STRIP -->
+  <section class="why-strip">
+    <div class="sec-tag">Why Work With Us</div>
+    <h2 class="sec-h2">What You Can <em>Expect</em></h2>
+    <div class="strip-grid">
+      <div class="strip-card">
+        <span class="strip-icon">⚡</span>
+        <div class="strip-title">Fast Response</div>
+        <div class="strip-text">We reply within 24 hours. No ghosting, no delays — just clear and prompt communication.</div>
+      </div>
+      <div class="strip-card">
+        <span class="strip-icon">💬</span>
+        <div class="strip-title">Clear Communication</div>
+        <div class="strip-text">Weekly updates, honest timelines, and zero jargon. You'll always know what's happening.</div>
+      </div>
+      <div class="strip-card">
+        <span class="strip-icon">🔧</span>
+        <div class="strip-title">Free Consultation</div>
+        <div class="strip-text">First call is always free. We'll discuss your idea and suggest the best approach — no strings attached.</div>
+      </div>
+      <div class="strip-card">
+        <span class="strip-icon">🛡️</span>
+        <div class="strip-title">Satisfaction Guarantee</div>
+        <div class="strip-text">We don't call it done until you're happy. Revisions are part of the process, not an extra charge.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="sec-tag">Common Questions</div>
+    <h2 class="sec-h2">Things People <em>Ask Us</em></h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <div class="faq-top">
+          <div class="faq-q">How long does a typical project take?</div>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-ans">It depends on the scope. A simple website takes 1–2 weeks. A full-stack web app usually takes 4–8 weeks. We'll give you a clear timeline in our proposal.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-top">
+          <div class="faq-q">Do you work with clients outside India?</div>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-ans">Yes! We work with clients globally. All communication is done online via email, WhatsApp, or video calls. Time zones are never a problem for us.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-top">
+          <div class="faq-q">What information do you need to get started?</div>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-ans">Just your idea! Tell us what you want to build, who it's for, and your approximate budget. We'll take it from there and ask the right questions.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-top">
+          <div class="faq-q">Can I request changes after the project is done?</div>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-ans">Absolutely. All our packages include a revision round. For larger changes post-launch, we offer affordable maintenance plans so you're always covered.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-top">
+          <div class="faq-q">Do you sign NDAs or confidentiality agreements?</div>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-ans">Yes, we respect your privacy and IP. We're happy to sign an NDA before any project discussion if you require it. Just mention it when you reach out.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-top">
+          <div class="faq-q">What payment methods do you accept?</div>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-ans">We accept UPI, bank transfer, and PayPal for international clients. We usually take 50% upfront and 50% upon delivery for new clients.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section class="location-section">
+    <div class="sec-tag">Find Us</div>
+    <h2 class="sec-h2">Where We're <em>Based</em></h2>
+    <div class="location-wrap">
+      <div class="location-card">
+        <div class="loc-label">Our Details</div>
+        <div class="loc-item">
+          <div class="loc-dot"></div>
+          <div>
+            <div class="loc-item-title">Headquarters</div>
+            <div class="loc-item-val">Krishnapur, New Town<br/>West Bengal — 700135<br/>India</div>
+          </div>
+        </div>
+        <div class="loc-item">
+          <div class="loc-dot"></div>
+          <div>
+            <div class="loc-item-title">Working Hours</div>
+            <div class="loc-item-val">Monday – Saturday<br/>10:00 AM – 8:00 PM IST</div>
+          </div>
+        </div>
+        <div class="loc-item">
+          <div class="loc-dot"></div>
+          <div>
+            <div class="loc-item-title">Founded</div>
+            <div class="loc-item-val">2025 — B.P. Poddar Institute<br/>of Management & Technology</div>
+          </div>
+        </div>
+      </div>
+      <div class="map-visual">
+        <div class="map-grid"></div>
+        <div class="pin-ring"></div>
+        <div class="pin-ring pin-ring2"></div>
+        <div class="map-pin">
+          <div class="pin-icon">📍</div>
+          <div class="pin-label">New Town, West Bengal</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">NEW DAY</div>
+    <div class="footer-copy">© 2025 New Day Software. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="index.html#team">Team</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursor=document.getElementById('cursor');
+    const ring=document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove',e=>{
+      mx=e.clientX;my=e.clientY;
+      cursor.style.left=mx+'px';cursor.style.top=my+'px';
+    });
+    function animRing(){
+      rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;
+      ring.style.left=rx+'px';ring.style.top=ry+'px';
+      requestAnimationFrame(animRing);
+    }
+    animRing();
+    document.querySelectorAll('a,button').forEach(el=>{
+      el.addEventListener('mouseenter',()=>{ring.style.transform='translate(-50%,-50%) scale(2)';ring.style.opacity='0.15';cursor.style.transform='translate(-50%,-50%) scale(0.5)';});
+      el.addEventListener('mouseleave',()=>{ring.style.transform='translate(-50%,-50%) scale(1)';ring.style.opacity='0.55';cursor.style.transform='translate(-50%,-50%) scale(1)';});
+    });
+
+    // Budget pills
+    document.querySelectorAll('.budget-pill').forEach(pill=>{
+      pill.addEventListener('click',()=>{
+        document.querySelectorAll('.budget-pill').forEach(p=>p.classList.remove('active'));
+        pill.classList.add('active');
+      });
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item=>{
+      item.querySelector('.faq-top').addEventListener('click',()=>{
+        const isOpen=item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+        if(!isOpen) item.classList.add('open');
+      });
+    });
+
+    // Form submit
+    document.getElementById('contactForm').addEventListener('submit',function(e){
+      e.preventDefault();
+      const fname=document.getElementById('fname').value.trim();
+      const email=document.getElementById('email').value.trim();
+      const message=document.getElementById('message').value.trim();
+      const service=document.getElementById('service').value;
+      if(!fname||!email||!message||!service){
+        // Shake empty required fields
+        [document.getElementById('fname'),document.getElementById('email'),document.getElementById('message'),document.getElementById('service')].forEach(el=>{
+          if(!el.value.trim()){
+            el.style.borderColor='#ff6b6b';
+            el.style.boxShadow='0 0 0 3px rgba(255,107,107,0.1)';
+            setTimeout(()=>{el.style.borderColor='';el.style.boxShadow='';},2000);
+          }
+        });
+        return;
+      }
+      // Loading state
+      const btn=document.getElementById('submitBtn');
+      btn.classList.add('loading');
+      document.getElementById('btnText').textContent='Sending...';
+      document.getElementById('btnArrow').textContent='⟳';
+      // Simulate send (replace with real backend later)
+      setTimeout(()=>{
+        document.getElementById('formView').style.display='none';
+        const sv=document.getElementById('successView');
+        sv.style.display='block';
+      },1800);
+    });
+
+    // Scroll animations
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach((entry,i)=>{
+        if(entry.isIntersecting) setTimeout(()=>entry.target.classList.add('visible'),i*100);
+      });
+    },{threshold:0.1});
+    document.querySelectorAll('.strip-card,.faq-item').forEach(el=>obs.observe(el));
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',e=>{
+        e.preventDefault();
+        const t=document.querySelector(a.getAttribute('href'));
+        if(t) window.scrollTo({top:t.offsetTop-70,behavior:'smooth'});
+      });
+    });
+  </script>
+</body>
+</html>
