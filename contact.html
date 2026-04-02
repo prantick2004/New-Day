@@ -250,7 +250,8 @@
       <li><a href="services.html">Services</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="index.html#process">Process</a></li>
-      <li><a href="index.html#team">Team</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="team.html">Team</a></li>
     </ul>
     <a href="contact.html" class="nav-cta active">Contact</a>
   </nav>
@@ -283,7 +284,7 @@
           <div class="info-icon ic-purple">✉️</div>
           <div>
             <div class="info-label">Email Us</div>
-            <div class="info-value">hello@newdaysoftware.dev</div>
+            <div class="info-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="98f0fdf4f4f7d8f6fdeffcf9e1ebf7feeceff9eafdb6fcfdee">[email&#160;protected]</a></div>
           </div>
         </div>
         <div class="info-card">
@@ -516,12 +517,12 @@
     <div class="footer-links">
       <a href="services.html">Services</a>
       <a href="about.html">About</a>
-      <a href="index.html#team">Team</a>
+      <a href="team.html">Team</a>
       <a href="contact.html">Contact</a>
     </div>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // Cursor
     const cursor=document.getElementById('cursor');
     const ring=document.getElementById('cursorRing');
@@ -599,11 +600,7 @@
 
     // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click',e=>{
-        e.preventDefault();
-        const t=document.querySelector(a.getAttribute('href'));
-        if(t) window.scrollTo({top:t.offsetTop-70,behavior:'smooth'});
-      });
+      a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)window.scrollTo({top:t.offsetTop-70,behavior:'smooth'});});
     });
   </script>
 </body>
